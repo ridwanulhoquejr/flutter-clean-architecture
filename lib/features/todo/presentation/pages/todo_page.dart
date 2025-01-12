@@ -1,0 +1,62 @@
+// create a page for shwoing our Todos
+
+import 'package:clean_architecture_with_bloc/features/todo/presentation/bloc/todo_bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class TodoPage extends StatelessWidget {
+  const TodoPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<TodoBloc, TodoState>(
+      listener: (context, state) {
+        if (state is TodoFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.failure.message),
+            ),
+          );
+        }
+      },
+      builder: (context, state) {
+        return RefreshIndicator(
+          onRefresh: () async {
+            context.read<TodoBloc>().add(GetTodosEvent());
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text('Todos'),
+            ),
+            body: switch (state) {
+              TodoInitial _ => Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context.read<TodoBloc>().add(GetTodosEvent());
+                    },
+                    child: const Text('Get Todos'),
+                  ),
+                ),
+              TodoLoading _ => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              TodoSuccess _ => ListView.builder(
+                  itemCount: state.todos.length,
+                  itemBuilder: (context, index) {
+                    final todo = state.todos[index];
+                    return ListTile(
+                      title: Text(todo.title!),
+                      subtitle: Text(todo.completed.toString()),
+                    );
+                  },
+                ),
+              TodoFailure() => Center(
+                  child: Text(state.failure.message),
+                ),
+            },
+          ),
+        );
+      },
+    );
+  }
+}
