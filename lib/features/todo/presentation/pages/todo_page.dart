@@ -1,5 +1,6 @@
 // create a page for shwoing our Todos
 
+import 'package:clean_architecture_with_bloc/core/utils/colored_logger.dart';
 import 'package:clean_architecture_with_bloc/features/todo/presentation/bloc/todo_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +13,8 @@ class TodoPage extends StatelessWidget {
     return BlocConsumer<TodoBloc, TodoState>(
       listener: (context, state) {
         if (state is TodoFailure) {
+          ColoredLogger.Magenta.log(
+              "state.failure.message: ${state.failure.message}");
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.failure.message),

@@ -1,6 +1,6 @@
 import 'package:clean_architecture_with_bloc/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:clean_architecture_with_bloc/core/network/connection_checker.dart';
-import 'package:clean_architecture_with_bloc/core/network/logging_interceptor.dart';
+import 'package:clean_architecture_with_bloc/core/network/dio_client.dart';
 import 'package:clean_architecture_with_bloc/core/secrets/app_secrets.dart';
 import 'package:clean_architecture_with_bloc/features/blog/data/datasources/blog_local_data_source.dart';
 import 'package:clean_architecture_with_bloc/features/blog/data/datasources/blog_remote_data_source.dart';

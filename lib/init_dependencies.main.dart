@@ -29,6 +29,7 @@ Future<void> initDependencies() async {
   serviceLocator.registerLazySingleton(
     () => AppUserCubit(),
   );
+
   serviceLocator.registerFactory<ConnectionChecker>(
     () => ConnectionCheckerImpl(
       serviceLocator(),
@@ -36,82 +37,16 @@ Future<void> initDependencies() async {
   );
 
   // initialize Dio instance
-  serviceLocator.registerLazySingleton(() => _dioService());
-}
+  serviceLocator.registerLazySingleton(() => DioClient.instance);
 
-Dio _dioService() {
-  final dio = Dio(
-    BaseOptions(
-      baseUrl: 'https://jsonplaceholder.typicode.com',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-    ),
-  );
-  dio.interceptors.add(
-    PrettyDioLogger(
-      requestHeader: true,
-      requestBody: true,
-      responseBody: true,
-      responseHeader: true,
-      error: true,
-      compact: true,
-      maxWidth: 90,
-    ),
-  );
-  return dio;
-}
+  //* registerFactory: It creates a new instance of the object every time it is requested.
+  // example of registerFactory will be our `Usecases`, `Repositories`, `Datasources` etc.
 
-void _initAuth() {
-  // registerFactory: It creates a new instance of the object every time it is requested.
-  // example of registerFactory will be our `Usecases`, `Repositories`, `Datasources`, etc.
-
-  // registerLazySingleton: It creates a single instance of the object and provides this instance every time it is requested.
+  //* registerLazySingleton: It creates a single instance of the object and provides this instance every time it is requested.
   // example of registerLazySingleton will be our `Dio`, `SharedPreferences`, `Bloc`, `Providers` etc.
-
-  // Datasource
-  // serviceLocator
-  //   ..registerFactory<AuthRemoteDataSource>(
-  //     // generics is for knowing that i have returned the Impl class but actual dependency is the interface class
-  //     // otherwise, it will not work
-  //     () => AuthRemoteDataSourceImpl(
-  //       serviceLocator(),
-  //     ),
-  //   )
-  // Repository
-  // ..registerFactory<AuthRepository>(
-  //   () => AuthRepositoryImpl(
-  //     serviceLocator(),
-  //     serviceLocator(),
-  //   ),
-  // )
-  // Usecases
-  // registerFactory(
-  //   () => UserSignUp(
-  //     serviceLocator(),
-  //   ),
-  // )
-  // ..registerFactory(
-  //   () => UserLogin(
-  //     serviceLocator(),
-  //   ),
-  // )
-  // ..registerFactory(
-  //   () => CurrentUser(
-  //     serviceLocator(),
-  //   ),
-  // )
-  // // Bloc
-  // ..registerLazySingleton(
-  //   () => AuthBloc(
-  //     userSignUp: serviceLocator(),
-  //     userLogin: serviceLocator(),
-  //     currentUser: serviceLocator(),
-  //     appUserCubit: serviceLocator(),
-  //   ),
-  // );
 }
+
+void _initAuth() {}
 
 void _initBlog() {
   // Datasource
@@ -160,7 +95,6 @@ void _initTodo() {
     ..registerLazySingleton<TodoRetroFitClient>(
       () => TodoRetroFitClient(
         serviceLocator<Dio>(),
-        baseUrl: 'https://jsonplaceholder.typicode.com',
       ),
     )
 
