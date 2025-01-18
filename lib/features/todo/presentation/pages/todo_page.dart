@@ -12,8 +12,8 @@ class TodoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<TodoBloc, TodoState>(
       listener: (context, state) {
-        if (state is TodoFailure) {
-          ColoredLogger.Magenta.log(
+        if (state is TodoLoadFailure) {
+          ColoredLogger.Yellow.log(
               "state.failure.message: ${state.failure.message}");
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -25,25 +25,27 @@ class TodoPage extends StatelessWidget {
       builder: (context, state) {
         return RefreshIndicator(
           onRefresh: () async {
-            context.read<TodoBloc>().add(GetTodosEvent());
+            context.read<TodoBloc>().add(TodoGetPressed());
           },
           child: Scaffold(
             appBar: AppBar(
-              title: const Text('Todos'),
+              title: const Text(
+                'Todos',
+              ),
             ),
             body: switch (state) {
               TodoInitial _ => Center(
                   child: ElevatedButton(
                     onPressed: () {
-                      context.read<TodoBloc>().add(GetTodosEvent());
+                      context.read<TodoBloc>().add(TodoGetPressed());
                     },
                     child: const Text('Get Todos'),
                   ),
                 ),
-              TodoLoading _ => const Center(
+              TodoLoadInProgress _ => const Center(
                   child: CircularProgressIndicator(),
                 ),
-              TodoSuccess _ => ListView.builder(
+              TodoLoadSuccess _ => ListView.builder(
                   itemCount: state.todos.length,
                   itemBuilder: (context, index) {
                     final todo = state.todos[index];
@@ -53,8 +55,10 @@ class TodoPage extends StatelessWidget {
                     );
                   },
                 ),
-              TodoFailure() => Center(
-                  child: Text(state.failure.message),
+              TodoLoadFailure() => Center(
+                  child: Text(
+                    state.failure.message,
+                  ),
                 ),
             },
           ),

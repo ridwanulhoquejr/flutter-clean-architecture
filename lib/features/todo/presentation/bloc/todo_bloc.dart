@@ -9,28 +9,26 @@ part 'todo_event.dart';
 part 'todo_state.dart';
 
 class TodoBloc extends Bloc<TodoEvent, TodoState> {
-  final GetAllTodos _getTodo;
+  final GetAllTodos _getAllTodo;
 
   TodoBloc({
     required GetAllTodos getTodo,
-  })  : _getTodo = getTodo,
-        super(
-          TodoInitial(),
-        ) {
-    // on<TodoEvent>((_, emit) => emit(TodoLoading()));
-    on<GetTodosEvent>(_onGetTodos);
+  })  : _getAllTodo = getTodo,
+        super(TodoInitial()) {
+    on<TodoEvent>((_, emit) => emit(TodoLoadInProgress()));
+    on<TodoGetPressed>(_onGetTodos);
   }
 
   void _onGetTodos(
-    GetTodosEvent event,
+    TodoGetPressed event,
     Emitter<TodoState> emit,
   ) async {
-    emit(TodoLoading());
-    final res = await _getTodo(NoParams());
+    // emit(TodoLoadInProgress());
+    final res = await _getAllTodo(NoParams());
 
     res.fold(
-      (l) => emit(TodoFailure(l)),
-      (r) => emit(TodoSuccess(r)),
+      (l) => emit(TodoLoadFailure(l)),
+      (r) => emit(TodoLoadSuccess(r)),
     );
   }
 }

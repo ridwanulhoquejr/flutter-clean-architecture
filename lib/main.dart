@@ -11,20 +11,10 @@ void main() async {
   runApp(
     MultiBlocProvider(
       providers: [
-        // BlocProvider(
-        //   create: (_) => serviceLocator<AppUserCubit>(),
-        // create: (_) => AuthBloc(
-        //   userSignUp: UserSignUp(
-        //     AuthRepositoryImpl(AuthRemoteDataSourceImpl(supebaseClient),
-        //         ConnectionCheckerImpl()),
-        //     userLogin: null,
-        //     currentUser: null,
-        //     appUserCubit: null,
-        //   ),
-        // ),
-        // ),
         BlocProvider(
-          create: (_) => serviceLocator<TodoBloc>(),
+          create: (_) => TodoBloc(
+            getTodo: serviceLocator(),
+          ),
         ),
       ],
       child: const MyApp(),

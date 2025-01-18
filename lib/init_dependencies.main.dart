@@ -99,28 +99,26 @@ void _initTodo() {
     )
 
     // Datasource
-    ..registerFactory<TodoRemoteDataSource>(
+    ..registerLazySingleton<TodoRemoteDataSource>(
       () => TodoRemoteDataSourceImpl(
         serviceLocator<TodoRetroFitClient>(),
       ),
     )
     // Repository
-    ..registerFactory<TodoRepository>(
+    ..registerLazySingleton<TodoRepository>(
       () => TodoRepositoryImpl(
         serviceLocator<TodoRemoteDataSource>(),
         serviceLocator<ConnectionChecker>(),
       ),
     )
     // Usecases
-    ..registerFactory(
+    ..registerLazySingleton(
       () => GetAllTodos(
         serviceLocator<TodoRepository>(),
       ),
-    )
-    // Bloc
-    ..registerLazySingleton(
-      () => TodoBloc(
-        getTodo: serviceLocator<GetAllTodos>(),
-      ),
     );
+  // ..registerFactory(
+  //   () => AuthBloc();
+
+  // )
 }

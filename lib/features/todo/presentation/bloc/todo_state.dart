@@ -5,16 +5,16 @@ sealed class TodoState {}
 
 final class TodoInitial extends TodoState {}
 
-final class TodoLoading extends TodoState {}
+final class TodoLoadInProgress extends TodoState {}
 
-final class TodoSuccess extends TodoState {
+final class TodoLoadSuccess extends TodoState {
   final List<Todo> todos;
 
-  TodoSuccess(this.todos);
+  TodoLoadSuccess(this.todos);
 }
 
-final class TodoFailure extends TodoState {
+final class TodoLoadFailure extends TodoState {
   final Failure failure;
 
-  TodoFailure(this.failure);
+  TodoLoadFailure(this.failure);
 }
