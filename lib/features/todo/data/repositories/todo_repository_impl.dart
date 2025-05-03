@@ -4,7 +4,7 @@ import 'package:clean_architecture_with_bloc/core/error/failures.dart';
 import 'package:clean_architecture_with_bloc/core/network/connection_checker.dart';
 import 'package:clean_architecture_with_bloc/features/todo/data/datasources/todo_remote_data_source.dart';
 import 'package:clean_architecture_with_bloc/features/todo/domain/entities/todo.dart';
-import 'package:clean_architecture_with_bloc/features/todo/domain/repository/todo_repository.dart';
+import 'package:clean_architecture_with_bloc/features/todo/domain/repositories/todo_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
 class TodoRepositoryImpl implements TodoRepository {

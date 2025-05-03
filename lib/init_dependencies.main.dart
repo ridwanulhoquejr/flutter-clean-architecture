@@ -3,33 +3,12 @@ part of 'init_dependencies.dart';
 final serviceLocator = GetIt.instance;
 
 Future<void> initDependencies() async {
-  // feature specific dependencies
-  _initAuth();
-  _initBlog();
-  _initTodo();
-
   // core dependencies
   // like internet connection, Dio, shared pref, etc
-  final supabase = await Supabase.initialize(
-    url: AppSecrets.supabaseUrl,
-    anonKey: AppSecrets.supabaseAnonKey,
-  );
-
-  Hive.defaultDirectory = (await getApplicationDocumentsDirectory()).path;
-
-  serviceLocator.registerLazySingleton(() => supabase.client);
-
-  serviceLocator.registerLazySingleton(
-    () => Hive.box(name: 'blogs'),
-  );
 
   serviceLocator.registerFactory(() => InternetConnection());
 
   // core
-  serviceLocator.registerLazySingleton(
-    () => AppUserCubit(),
-  );
-
   serviceLocator.registerFactory<ConnectionChecker>(
     () => ConnectionCheckerImpl(
       serviceLocator(),
@@ -44,49 +23,9 @@ Future<void> initDependencies() async {
 
   //* registerLazySingleton: It creates a single instance of the object and provides this instance every time it is requested.
   // example of registerLazySingleton will be our `Dio`, `SharedPreferences`, `Bloc`, `Providers` etc.
-}
 
-void _initAuth() {}
-
-void _initBlog() {
-  // Datasource
-  serviceLocator
-    ..registerFactory<BlogRemoteDataSource>(
-      () => BlogRemoteDataSourceImpl(
-        serviceLocator(),
-      ),
-    )
-    ..registerFactory<BlogLocalDataSource>(
-      () => BlogLocalDataSourceImpl(
-        serviceLocator(),
-      ),
-    )
-    // Repository
-    ..registerFactory<BlogRepository>(
-      () => BlogRepositoryImpl(
-        serviceLocator(),
-        serviceLocator(),
-        serviceLocator(),
-      ),
-    )
-    // Usecases
-    ..registerFactory(
-      () => UploadBlog(
-        serviceLocator(),
-      ),
-    )
-    ..registerFactory(
-      () => GetAllBlogs(
-        serviceLocator(),
-      ),
-    )
-    // Bloc
-    ..registerLazySingleton(
-      () => BlogBloc(
-        uploadBlog: serviceLocator(),
-        getAllBlogs: serviceLocator(),
-      ),
-    );
+  // feature specific dependencies
+  _initTodo();
 }
 
 void _initTodo() {
@@ -117,8 +56,4 @@ void _initTodo() {
         serviceLocator<TodoRepository>(),
       ),
     );
-  // ..registerFactory(
-  //   () => AuthBloc();
-
-  // )
 }
