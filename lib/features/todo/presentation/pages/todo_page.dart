@@ -50,7 +50,7 @@ class TodoPage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final todo = state.todos[index];
                     return ListTile(
-                      title: Text(todo.title!),
+                      title: Text(todo.title),
                       subtitle: Text(todo.completed.toString()),
                     );
                   },

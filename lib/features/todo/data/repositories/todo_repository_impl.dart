@@ -21,12 +21,15 @@ class TodoRepositoryImpl implements TodoRepository {
   Future<Either<Failure, List<Todo>>> getTodos() async {
     try {
       if (!await connectionChecker.isConnected) {
-        return left(const Failure(Constants.noConnectionErrorMessage));
+        return left(const NetworkFailure(Constants.noConnectionErrorMessage));
       }
       final result = await todoRemoteDataSource.getTodos();
       return right(result);
     } on ServerException catch (e) {
-      return left(Failure(e.message));
+      return left(ServerFailure(e.message, e.statusCode));
+    } catch (e) {
+      // fallback so nothing escapes the repository boundary uncaught
+      return left(ServerFailure(e.toString()));
     }
   }
 }

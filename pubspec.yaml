@@ -17,23 +17,21 @@ dependencies:
   supabase_flutter: ^2.8.3
   flutter_bloc: ^9.0.0
   get_it: ^8.0.3
-  dotted_border: ^2.1.0
   image_picker: ^1.1.2
-  uuid: ^4.5.1
   intl: ^0.20.1
   internet_connection_checker_plus: ^2.7.0
-  hive: ^4.0.0-dev.2
-  isar_flutter_libs: ^4.0.0-dev.13
-  path_provider: ^2.1.5
   dio: ^5.7.0
   retrofit: ^4.4.2
   equatable: ^2.0.7
   go_router: ^15.1.1
+  # Removed (no imports in lib/): dotted_border, uuid, hive,
+  # isar_flutter_libs, path_provider. Re-add when actually used.
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  bloc_test: ^9.1.7
   build_runner: ^2.4.14
   flutter_lints: ^5.0.0
   retrofit_generator: ^9.1.7

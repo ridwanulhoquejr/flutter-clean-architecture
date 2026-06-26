@@ -15,15 +15,14 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     required GetAllTodos getTodo,
   })  : _getAllTodo = getTodo,
         super(TodoInitial()) {
-    on<TodoEvent>((_, emit) => emit(TodoLoadInProgress()));
     on<TodoGetPressed>(_onGetTodos);
   }
 
-  void _onGetTodos(
+  Future<void> _onGetTodos(
     TodoGetPressed event,
     Emitter<TodoState> emit,
   ) async {
-    // emit(TodoLoadInProgress());
+    emit(TodoLoadInProgress());
     final res = await _getAllTodo(NoParams());
 
     res.fold(

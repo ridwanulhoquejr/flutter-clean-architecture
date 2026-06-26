@@ -16,7 +16,7 @@ Future<void> initDependencies() async {
   );
 
   // initialize Dio instance
-  serviceLocator.registerLazySingleton(() => DioClient.instance);
+  serviceLocator.registerLazySingleton<Dio>(() => DioClient.create());
 
   //* registerFactory: It creates a new instance of the object every time it is requested.
   // example of registerFactory will be our `Usecases`, `Repositories`, `Datasources` etc.
